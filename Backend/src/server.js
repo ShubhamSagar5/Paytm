@@ -4,6 +4,7 @@ const dotenv = require('dotenv')
 const userRouter = require("./routes/userRroute")
 const bankRouter = require("./routes/bankRoute")
 const connection = require('./database/database')
+const cookieParser = require('cookie-parser')
 
 const app = express() 
 
@@ -13,6 +14,7 @@ dotenv.config({
 
 app.use(cors())
 app.use(express.json()) 
+app.use(cookieParser())
 
 app.use("/api/v1/user",userRouter)
 app.use("/api/v1/bank",bankRouter)
