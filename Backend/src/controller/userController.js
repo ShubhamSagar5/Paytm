@@ -168,10 +168,47 @@ const updateData = async(req,res)=>{
     }
 }
 
+const findUSer = async(req,res) => {
+    try {
+        
+        const userId = req.userId 
 
+        const filter = req.query.filter || "" 
+
+        const userList = await User.find({
+            $or:[{
+                firstName:{
+                    "$regex":filter
+                }
+            },{
+                lastName:{
+                    "$regex":filter
+            }}
+        ]
+        }) 
+        
+        return res.status(200).json({
+            success:true,
+            message:"User List",
+            userList : userList.map((user)=>({
+                email:user.email,
+                firstName:user.firstName,
+                lastName:user.lastName,
+                id:user._id
+            }))
+        })
+
+    } catch (error) {
+        return res.status(500).json({
+            success:false,
+            message:error.message
+        })
+    }
+}
 
 module.exports = {
     signUp,
     login,
-    updateData
+    updateData,
+    findUSer
 }
