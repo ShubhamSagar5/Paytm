@@ -84,6 +84,27 @@ const transferFunds = async(req,res) => {
     }
 }
 
+const getBalance = async(req,res) => {
+    try {
+        const userId = req.userId 
+
+        const balance = await Account.findOne({userId:userId})
+        
+        return res.status(200).json({
+            success:true,
+            message:`Your Available Balance is Rs:-${balance.balance.toFixed(2)}`
+        })
+
+    } catch (error) {
+        return res.status(500).json({
+            success:false,
+            message:error.message
+        })
+    }
+}
+
+
 module.exports = {
-    transferFunds
+    transferFunds,
+    getBalance
 }
