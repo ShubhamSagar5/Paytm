@@ -6,7 +6,7 @@ import LogIn from './Pages/LogIn'
 import SendMoney from './Pages/SendMoney'
 import Navbar from './Components/Navbar'
 import { ToastContainer, toast } from 'react-toastify';
-
+import 'react-toastify/dist/ReactToastify.css';
 
 const App = () => {
   return (

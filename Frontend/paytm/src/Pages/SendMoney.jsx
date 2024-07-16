@@ -12,9 +12,15 @@ const SendMoney = () => {
         <div className='my-5'>
           <img className='h-14' src="../public/user.png" alt="" />
         </div>
-        <div className='font-semibold text-xl mt-3'>
+        <div className='flex   items-center'>
+        <div className='h-[50px] w-[50px] text-center text-white bg-pink-500 text-3xl font-bold rounded-full mr-8 -ml-16'>
+          s
+        </div>
+          <div className='font-semibold text-2xl '>
           Shubham Sagar
         </div>
+        </div>
+        
         <div className='mt-9 '>
           <input type="text" className='p-2 focus:outline-none rounded-l-lg' placeholder='Enter Amount' />
           <button className='bg-paytm  py-2 px-5 rounded-r-lg'>Pay</button>

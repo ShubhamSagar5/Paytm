@@ -21,6 +21,8 @@ const LogIn = () => {
             <div className='mt-14'>
             <Input label='Email' placeholder ="Enter Your Email" onchange={setEmail} value={email} required />
             <Input label='Password' placeholder ="Enter Your Password" onchange={setPassword} value={password} required />
+            
+            <button className='bg-paytm w-full rounded-lg p-2 text-lg font-semibold mt-5'>Log In</button>
 
             </div>
 

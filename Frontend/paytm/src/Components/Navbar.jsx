@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 
 const Navbar = () => {
   return (
@@ -10,11 +11,12 @@ const Navbar = () => {
                 <img src="./public/upi.png" alt="" />
             </div>
             <div className='flex items-center mx-5'>
-              <div className='mx-2 text-lg font-semibold'>Home</div>
-              <div className='mx-2 text-lg font-semibold'>About</div>
-              <div className='mx-2 text-lg font-semibold'>Services</div>
-              <div className='mx-2 text-lg font-semibold'>Contact</div>
-              <div className='mx-2 text-lg font-semibold'>SignOut</div>
+            
+              <Link to={"/"}><div className='mx-2 text-lg font-semibold'>Home</div></Link>  
+              <Link to={""}><div className='mx-2 text-lg font-semibold'>About</div></Link>  
+              <Link to={""}><div className='mx-2 text-lg font-semibold'>Services</div></Link>  
+              <Link to={""}><div className='mx-2 text-lg font-semibold'>Contact</div></Link>  
+              <Link to={""}><div className='mx-2 text-lg font-semibold'>SignOut</div></Link>  
             </div>
         </div>
            

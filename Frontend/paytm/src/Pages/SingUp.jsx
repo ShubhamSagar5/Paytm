@@ -1,6 +1,10 @@
 import React, { useState } from 'react'
 import Input from '../Components/Input'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import axios from 'axios'
+import { toast } from 'react-toastify'
+import { useSetRecoilState } from 'recoil'
+import { isSignIn } from '../atom'
 
 const SingUp = () => {
 
@@ -8,7 +12,28 @@ const SingUp = () => {
     const [firstName,setFirstName]  = useState('')
     const [lastName,setLastName] = useState('')
     const [password,setPassword] = useState('')
-    console.log(email)
+
+    const navigate = useNavigate()
+
+    const setsignIn = useSetRecoilState(isSignIn)
+
+    const handleSignUp = async() => {
+        try {
+            
+            const res = await axios.post('http://localhost:3000/api/v1/user/signUp',{
+                email,
+                firstName,
+                lastName,
+                password
+            }) 
+            setsignIn(true)
+            navigate("/")
+            toast.success(res.data.message)
+        } catch (error) {
+            toast.error(error.message)
+        }
+    }
+
     return (
     <div className='flex justify-center '>
     <div className='w-3/12 shadow-xl rounded-lg'>
@@ -24,7 +49,11 @@ const SingUp = () => {
             <Input label='Last Name' placeholder ="Enter Your Last Name" onchange={setLastName} value={lastName} required />
             <Input label='Password' placeholder ="Enter Your Password" onchange={setPassword} value={password} required />
 
+            <button className='bg-paytm w-full rounded-lg p-2 text-lg font-semibold mt-5' onClick={handleSignUp} >SignUp</button>
             </div>
+
+
+
             <Link to={"/login"}>
                <div className='text-sm font-semibold mt-4'>
             * If you already have an account, please log in ⏩

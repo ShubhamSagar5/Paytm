@@ -12,7 +12,9 @@ dotenv.config({
     path:"./config/.env"
 })
 
-app.use(cors())
+app.use(cors({
+    origin:"*"
+}))
 app.use(express.json()) 
 app.use(cookieParser())
 
