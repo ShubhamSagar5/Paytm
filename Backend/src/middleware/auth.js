@@ -3,13 +3,16 @@ const jwt = require('jsonwebtoken')
 
 const auth = async (req,res,next) => {
     try {
-        const {Token} = req.cookies
-        if(!Token){
-            return res.status(404).json({
-                success:false,
-                message:"Token Not Found please SignUp or Login"
-            })
-      }
+        const authHeader  = req.headers['authorization']
+        if (!authHeader || !authHeader.startsWith('Bearer ')) {
+            return res.status(401).json({
+                success: false,
+                message: 'Unauthorized: Missing or invalid token',
+            });
+        }
+
+        const Token = authHeader.split(' ')[1];
+        
         const decode = jwt.verify(Token,process.env.JWT_SECRET_KEY)
     
         if(!decode){

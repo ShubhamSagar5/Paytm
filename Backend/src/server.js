@@ -13,7 +13,8 @@ dotenv.config({
 })
 
 app.use(cors({
-    origin:"*"
+    origin:"*",
+    credentials:true
 }))
 app.use(express.json()) 
 app.use(cookieParser())

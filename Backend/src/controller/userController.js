@@ -62,9 +62,13 @@ const signUp = async(req,res) => {
             expiresIn:process.env.JWT_EXPIRES
         })
 
-        return res.cookie("Token",token).status(200).json({
+        return res.cookie("Token",token,{ httpOnly: true, secure: true, sameSite: 'none' }).status(200).json({
             success:true,
-            message:"User Sign In Successfully"
+            message:"User Sign In Successfully",
+            balance :createAccountBalance,
+            userData:createUser._id,
+            token
+        
         })
 
     } catch (error) {
@@ -109,9 +113,14 @@ const login = async(req,res) => {
             expiresIn:process.env.JWT_EXPIRES
         })
 
-        return res.cookie("Token",token).status(200).json({
+        const balance = await Account.findOne({userId:user._id})
+
+        return res.cookie("Token",token,{ httpOnly: true, secure: true, sameSite: 'none' }).status(200).json({
             success:true,
-            message:"User Login In Successfully"
+            message:"User Login In Successfully",
+            userData: user._id,
+            balance:parseFloat(balance.balance.toFixed(2)),
+            token
         })
 
     } catch (error) {
@@ -206,9 +215,42 @@ const findUSer = async(req,res) => {
     }
 }
 
+const findAdminData  = async(req,res)=> {
+    try {
+        const {id} = req.params 
+
+        const userData = await User.findById(id)
+
+        const balanceData = await Account.findOne({userId:id})
+
+        if(!userData || !balanceData){
+            return res.status(404).json({
+                suceess:false,
+                message:"User Not Found"
+            })
+        }
+        
+        return res.status(200).json({
+            success:true,
+            adminData:{
+                userData,
+                balanceData
+            }
+        })
+
+
+    } catch (error) {
+        return res.status(500).json({
+            suceess:false,
+            message:"Internal Error" + error.message
+        })
+    }
+}
+
 module.exports = {
     signUp,
     login,
     updateData,
-    findUSer
+    findUSer,
+    findAdminData
 }

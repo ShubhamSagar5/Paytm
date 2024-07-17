@@ -4,7 +4,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import { toast } from 'react-toastify'
 import { useSetRecoilState } from 'recoil'
-import { isSignIn } from '../atom'
+import { isSignIn, userDataLogin } from '../atom'
 
 const SingUp = () => {
 
@@ -16,6 +16,7 @@ const SingUp = () => {
     const navigate = useNavigate()
 
     const setsignIn = useSetRecoilState(isSignIn)
+    const setuserData = useSetRecoilState(userDataLogin)
 
     const handleSignUp = async() => {
         try {
@@ -27,10 +28,14 @@ const SingUp = () => {
                 password
             }) 
             setsignIn(true)
+            setuserData(res.data.balance)
             navigate("/")
             toast.success(res.data.message)
+            window.localStorage.setItem("token",res.data.token)
+            window.localStorage.setItem("userId",res.data.balance.userId)
+
         } catch (error) {
-            toast.error(error.message)
+            toast.error(error.response.data.message)
         }
     }
 

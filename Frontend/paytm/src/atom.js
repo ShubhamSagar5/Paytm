@@ -19,3 +19,10 @@ export const isSignIn = atom({
 
 })
 
+
+export const userDataLogin = atom({
+    key:'userData',
+    default:{
+       
+    }
+})

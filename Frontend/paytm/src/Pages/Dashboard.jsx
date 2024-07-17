@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import {useNavigate} from 'react-router-dom'
 import { useRecoilValue } from 'recoil';
-import { getAllUserData, isSignIn } from '../atom';
+import { getAllUserData, isSignIn, userDataLogin } from '../atom';
 import Loader from '../Components/Loader';
 import axios from 'axios';
 
@@ -12,11 +12,16 @@ const Dashboard = () => {
   
   const UserList = useRecoilValue(getAllUserData)
 
+  const accountInfo  = useRecoilValue(userDataLogin)
+
   const [list,setList] = useState([]) 
+
+  const [adminData,setadminData ] = useState({})
 
   const [searchTxt,setSearchText] = useState('')
 
-  
+  const token = window.localStorage.getItem("token")
+  const userId = window.localStorage.getItem("userId")
 
   const navigate = useNavigate() 
   
@@ -29,19 +34,39 @@ const Dashboard = () => {
       setList(res.data.userList)
     }
 
-  useEffect(()=>{
-    if(!signIn){
+    const adminInfo = async () => {
+      const res = await axios.get(`http://localhost:3000/api/v1/user/admin/${userId}`)
+      console.log(res)
+      setadminData(res.data)
+    }
+
+    const handleFilterList = async() => {
+      const res = await axios.get(`http://localhost:3000/api/v1/user/findUser?filter=${searchTxt}`)
+      setList(res.data.userList)
+    
+    }
+
+  const handleSignUp = () => {
+    if(!token && !userId){
       navigate("/signup")
     }
-    getListUser()
-  },[signIn])
-
-  if(!signIn){
-    return <Loader/>
   }
 
+  useEffect(()=>{
+    handleSignUp()
+    getListUser()
+    adminInfo()
+  },[token])
+
+  useEffect(()=>{
+    handleFilterList()
+  },[searchTxt])
+
+  console.log(adminData)
+  
+
   return    (
-  <div className=' bg-paytm-light h-[100vh] shadow-black '>
+  <div className=' bg-paytm-light h-[100%] shadow-black '>
      <div className='m-2  flex justify-between'>
     
       <div className='m-3 w-8/12'>
@@ -81,9 +106,10 @@ const Dashboard = () => {
         <div className='m-2 shadow-2xl p-5'>
         <div className='text-3xl font-semibold '>My Account Information</div>
         <div className='mt-10'>
-        <div className='text-2xl font-mono'>Name: Shubham Sagar</div>
-        <div className='text-2xl  font-mono'>UserName: shubham@gmail.com</div>
-        <div className='text-2xl  font-mono'>AccountBalance: 452000</div>
+        <div className='text-2xl font-mono'>Name: {(adminData.adminData?.userData?.firstName)+" "+(adminData.adminData?.userData?.lastName)}</div>
+        <div className='text-2xl  font-mono'>UserName: {adminData.adminData?.userData?.email}</div>
+              
+        <div className='text-2xl  font-mono'>AccountBalance: ₹ {Math.round(adminData.adminData?.balanceData?.balance * 100) / 100}</div>
         </div>
        
         </div>
